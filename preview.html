@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>acme / ideas — What should we build next?</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['"Newsreader"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            cream: {
+              50: '#fdfcf9',
+              100: '#fbf9f4',
+              200: '#f5f1e8',
+            },
+            brand: {
+              green: '#1b6b45',
+            }
+          }
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .serif-title {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+  </style>
+</head>
+<body class="bg-[#fbf9f4] dark:bg-[#121212] text-stone-900 dark:text-stone-100 min-h-screen transition-colors duration-200 antialiased">
+
+  <!-- Top Dark Header (from screenshot) -->
+  <header class="bg-[#111111] dark:bg-[#0a0a0a] border-b border-stone-800 text-white sticky top-0 z-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Logo: acme / ideas -->
+      <div class="flex items-center space-x-1 text-lg">
+        <span class="font-bold tracking-tight text-white">acme</span>
+        <span class="text-stone-500 font-light px-1">/</span>
+        <span class="serif-title italic text-stone-300 font-normal">ideas</span>
+      </div>
+
+      <!-- Right controls: User Status + Theme Switcher + SUBMIT AN IDEA -->
+      <div class="flex items-center space-x-3">
+        <!-- Verified User Header Badge (visible when authenticated) -->
+        <div id="userHeaderBadge" class="hidden items-center space-x-2 px-2.5 py-1 rounded-full bg-stone-900 border border-stone-800 text-xs">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span class="text-stone-300 font-medium hidden sm:inline" id="userHeaderEmail">alex@gmail.com</span>
+          <button onclick="logoutAuth()" class="text-stone-400 hover:text-white transition text-[11px] underline ml-1">Sign out</button>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggle" type="button" aria-label="Toggle Theme" class="p-2 rounded-lg text-stone-400 hover:text-white hover:bg-stone-800 transition">
+          <svg id="sunIcon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg id="moonIcon" class="w-4 h-4 block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.03 9.03 0 008.354-5.646z" />
+          </svg>
+        </button>
+
+        <!-- SUBMIT AN IDEA Button -->
+        <button onclick="openModal()" class="bg-white hover:bg-stone-100 text-stone-900 font-bold text-xs tracking-wider uppercase px-4 py-2.5 rounded-lg transition shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-stone-400">
+          SUBMIT AN IDEA
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Hero & Feedback List -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-16 pb-24">
+    
+    <!-- Hero Section -->
+    <div class="mb-12">
+      <h1 class="serif-title text-4xl sm:text-6xl font-normal tracking-tight text-stone-950 dark:text-stone-50 leading-[1.1]">
+        What should we<br />
+        <span class="italic text-[#1b6b45] dark:text-[#34d399]">build next?</span>
+      </h1>
+      <p class="text-stone-600 dark:text-stone-400 text-base sm:text-lg mt-5 max-w-xl font-normal leading-relaxed">
+        Share your ideas, vote on what matters most, and track what we're working on. 1-click verification with Google or GitHub — no passwords.
+      </p>
+
+      <!-- Counter divider: — 5 IDEAS (100 / PAGE) -->
+      <div class="mt-12 flex items-center">
+        <span id="ideasCounterBadge" class="text-xs font-mono font-medium tracking-widest text-stone-400 dark:text-stone-500 uppercase">— 5 IDEAS (100 / PAGE • SCROLL TO LOAD)</span>
+      </div>
+      <div class="w-full h-px bg-stone-200/80 dark:bg-stone-800 mt-3"></div>
+    </div>
+
+    <!-- Ideas List (Exact items from screenshot) -->
+    <div class="space-y-3" id="ideasList">
+
+      <!-- Item 1: Dark mode support -->
+      <div class="group bg-white/80 dark:bg-[#1a1a1a] rounded-xl p-4 sm:p-5 border border-stone-200/80 dark:border-stone-800 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:border-stone-300 dark:hover:border-stone-700 hover:shadow-md transition flex items-center justify-between gap-4 cursor-pointer">
+        <div class="flex items-center gap-4 sm:gap-5 flex-1 min-w-0">
+          <!-- Upvote Box -->
+          <button onclick="event.stopPropagation(); toggleVote(this, 42)" data-initial-count="42" class="vote-btn flex flex-col items-center justify-center w-12 h-14 rounded-lg border border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-stone-900/60 hover:bg-emerald-50 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:border-emerald-700 transition flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+            </svg>
+            <span class="vote-count font-bold text-sm text-stone-800 dark:text-stone-200 mt-0.5">42</span>
+          </button>
+          <!-- Content -->
+          <div class="min-w-0 flex-1">
+            <h2 class="text-base font-semibold text-stone-900 dark:text-stone-100 truncate">Dark mode support</h2>
+            <p class="text-sm text-stone-500 dark:text-stone-400 mt-0.5 truncate">A dark colour theme across the whole app — much easier on the eyes during evenin...</p>
+          </div>
+        </div>
+        <!-- Status Badge & Chevron -->
+        <div class="flex items-center space-x-3 flex-shrink-0">
+          <span class="text-xs font-bold tracking-wider uppercase text-emerald-700 bg-emerald-50 dark:bg-emerald-950/50 dark:text-emerald-400 px-3 py-1 rounded-full border border-emerald-200/60 dark:border-emerald-800/60">
+            PLANNED
+          </span>
+          <svg class="w-4 h-4 text-stone-300 dark:text-stone-600 group-hover:text-stone-400 dark:group-hover:text-stone-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Item 2: Bulk export to CSV -->
+      <div class="group bg-white/80 dark:bg-[#1a1a1a] rounded-xl p-4 sm:p-5 border border-stone-200/80 dark:border-stone-800 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:border-stone-300 dark:hover:border-stone-700 hover:shadow-md transition flex items-center justify-between gap-4 cursor-pointer">
+        <div class="flex items-center gap-4 sm:gap-5 flex-1 min-w-0">
+          <!-- Upvote Box -->
+          <button onclick="event.stopPropagation(); toggleVote(this, 35)" data-initial-count="35" class="vote-btn flex flex-col items-center justify-center w-12 h-14 rounded-lg border border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-stone-900/60 hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-950/40 dark:hover:border-blue-700 transition flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+            </svg>
+            <span class="vote-count font-bold text-sm text-stone-800 dark:text-stone-200 mt-0.5">35</span>
+          </button>
+          <!-- Content -->
+          <div class="min-w-0 flex-1">
+            <h2 class="text-base font-semibold text-stone-900 dark:text-stone-100 truncate">Bulk export to CSV</h2>
+            <p class="text-sm text-stone-500 dark:text-stone-400 mt-0.5 truncate">Export any filtered data set to CSV for use in external reporting and finance tool...</p>
+          </div>
+        </div>
+        <!-- Status Badge & Chevron -->
+        <div class="flex items-center space-x-3 flex-shrink-0">
+          <span class="text-xs font-bold tracking-wider uppercase text-blue-700 bg-blue-50 dark:bg-blue-950/50 dark:text-blue-400 px-3 py-1 rounded-full border border-blue-200/60 dark:border-blue-800/60">
+            IN PROGRESS
+          </span>
+          <svg class="w-4 h-4 text-stone-300 dark:text-stone-600 group-hover:text-stone-400 dark:group-hover:text-stone-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Item 3: Search across tags and custom fields -->
+      <div class="group bg-white/80 dark:bg-[#1a1a1a] rounded-xl p-4 sm:p-5 border border-stone-200/80 dark:border-stone-800 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:border-stone-300 dark:hover:border-stone-700 hover:shadow-md transition flex items-center justify-between gap-4 cursor-pointer">
+        <div class="flex items-center gap-4 sm:gap-5 flex-1 min-w-0">
+          <!-- Upvote Box -->
+          <button onclick="event.stopPropagation(); toggleVote(this, 28)" data-initial-count="28" class="vote-btn flex flex-col items-center justify-center w-12 h-14 rounded-lg border border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-stone-900/60 hover:bg-amber-50 hover:border-amber-300 dark:hover:bg-amber-950/40 dark:hover:border-amber-700 transition flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+            </svg>
+            <span class="vote-count font-bold text-sm text-stone-800 dark:text-stone-200 mt-0.5">28</span>
+          </button>
+          <!-- Content -->
+          <div class="min-w-0 flex-1">
+            <h2 class="text-base font-semibold text-stone-900 dark:text-stone-100 truncate">Search across tags and custom fields</h2>
+            <p class="text-sm text-stone-500 dark:text-stone-400 mt-0.5 truncate">Current search only covers titles. Including tags and metadata would make i...</p>
+          </div>
+        </div>
+        <!-- Status Badge & Chevron -->
+        <div class="flex items-center space-x-3 flex-shrink-0">
+          <span class="text-xs font-bold tracking-wider uppercase text-amber-800 bg-amber-50 dark:bg-amber-950/50 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-200/60 dark:border-amber-800/60">
+            UNDER REVIEW
+          </span>
+          <svg class="w-4 h-4 text-stone-300 dark:text-stone-600 group-hover:text-stone-400 dark:group-hover:text-stone-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Item 4: Two-factor authentication -->
+      <div class="group bg-white/80 dark:bg-[#1a1a1a] rounded-xl p-4 sm:p-5 border border-stone-200/80 dark:border-stone-800 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:border-stone-300 dark:hover:border-stone-700 hover:shadow-md transition flex items-center justify-between gap-4 cursor-pointer">
+        <div class="flex items-center gap-4 sm:gap-5 flex-1 min-w-0">
+          <!-- Upvote Box -->
+          <button onclick="event.stopPropagation(); toggleVote(this, 20)" data-initial-count="20" class="vote-btn flex flex-col items-center justify-center w-12 h-14 rounded-lg border border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-stone-900/60 hover:bg-stone-100 hover:border-stone-300 dark:hover:bg-stone-800 dark:hover:border-stone-600 transition flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+            </svg>
+            <span class="vote-count font-bold text-sm text-stone-800 dark:text-stone-200 mt-0.5">20</span>
+          </button>
+          <!-- Content -->
+          <div class="min-w-0 flex-1">
+            <h2 class="text-base font-semibold text-stone-900 dark:text-stone-100 truncate">Two-factor authentication</h2>
+            <p class="text-sm text-stone-500 dark:text-stone-400 mt-0.5 truncate">Optional 2FA via authenticator app or SMS to strengthen account security.</p>
+          </div>
+        </div>
+        <!-- Status Badge & Chevron -->
+        <div class="flex items-center space-x-3 flex-shrink-0">
+          <span class="text-xs font-bold tracking-wider uppercase text-stone-600 bg-stone-100 dark:bg-stone-800 dark:text-stone-300 px-3 py-1 rounded-full border border-stone-200 dark:border-stone-700">
+            COMPLETED
+          </span>
+          <svg class="w-4 h-4 text-stone-300 dark:text-stone-600 group-hover:text-stone-400 dark:group-hover:text-stone-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Item 5: Native iOS and Android app -->
+      <div class="group bg-white/80 dark:bg-[#1a1a1a] rounded-xl p-4 sm:p-5 border border-stone-200/80 dark:border-stone-800 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:border-stone-300 dark:hover:border-stone-700 hover:shadow-md transition flex items-center justify-between gap-4 cursor-pointer">
+        <div class="flex items-center gap-4 sm:gap-5 flex-1 min-w-0">
+          <!-- Upvote Box -->
+          <button onclick="event.stopPropagation(); toggleVote(this, 15)" data-initial-count="15" class="vote-btn flex flex-col items-center justify-center w-12 h-14 rounded-lg border border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-stone-900/60 hover:bg-rose-50 hover:border-rose-300 dark:hover:bg-rose-950/40 dark:hover:border-rose-700 transition flex-shrink-0">
+            <svg class="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+            </svg>
+            <span class="vote-count font-bold text-sm text-stone-800 dark:text-stone-200 mt-0.5">15</span>
+          </button>
+          <!-- Content -->
+          <div class="min-w-0 flex-1">
+            <h2 class="text-base font-semibold text-stone-900 dark:text-stone-100 truncate">Native iOS and Android app</h2>
+            <p class="text-sm text-stone-500 dark:text-stone-400 mt-0.5 truncate">A dedicated mobile app for easier use on the go rather than relying on a mobile br...</p>
+          </div>
+        </div>
+        <!-- Status Badge & Chevron -->
+        <div class="flex items-center space-x-3 flex-shrink-0">
+          <span class="text-xs font-bold tracking-wider uppercase text-rose-700 bg-rose-50 dark:bg-rose-950/50 dark:text-rose-400 px-3 py-1 rounded-full border border-rose-200/60 dark:border-rose-800/60">
+            DECLINED
+          </span>
+          <svg class="w-4 h-4 text-stone-300 dark:text-stone-600 group-hover:text-stone-400 dark:group-hover:text-stone-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Infinite Scroll Loader (100 ideas per batch) -->
+    <div id="scrollLoader" class="pt-8 pb-4 text-center">
+      <div id="loadingSpinner" class="hidden flex items-center justify-center space-x-2 text-stone-500 dark:text-stone-400 text-xs font-mono">
+        <svg class="animate-spin w-4 h-4 text-[#1b6b45] dark:text-[#34d399]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span>Loading ideas (100 per page batch)...</span>
+      </div>
+      <div id="endOfFeedNotice" class="text-stone-400 dark:text-stone-600 text-xs font-mono tracking-widest uppercase py-2">
+        — 100 IDEAS / BATCH • SCROLL TO LOAD MORE —
+      </div>
+    </div>
+  </main>
+
+  <!-- Submit Idea Modal (Zero friction, no passwords) -->
+  <div id="submitModal" class="fixed inset-0 z-50 hidden bg-stone-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#fbf9f4] dark:bg-[#1a1a1a] rounded-2xl max-w-lg w-full p-6 sm:p-8 border border-stone-200 dark:border-stone-800 shadow-2xl relative">
+      <button onclick="closeModal()" class="absolute top-5 right-5 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div id="modalFormContainer">
+        <h3 class="serif-title text-2xl font-normal text-stone-950 dark:text-white">Submit a Product Idea</h3>
+        <p class="text-sm text-stone-600 dark:text-stone-400 mt-1 font-normal">Tell us what you'd like to see next. 1-click social sign-in — zero passwords.</p>
+
+        <form id="ideaForm" onsubmit="handleFormSubmit(event)" class="mt-6 space-y-4">
+          <div>
+            <label class="block text-xs font-mono font-medium uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1">Title</label>
+            <input id="ideaTitleInput" required type="text" placeholder="Short, descriptive title" class="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-white focus:ring-2 focus:ring-[#1b6b45] focus:outline-none text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-mono font-medium uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1">Description</label>
+            <textarea id="ideaDescInput" required rows="3" placeholder="Explain what problem this solves for you..." class="w-full px-3.5 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-900 dark:text-white focus:ring-2 focus:ring-[#1b6b45] focus:outline-none text-sm"></textarea>
+          </div>
+
+          <!-- 1-Click Verification Area -->
+          <div id="modalAuthSection">
+            <!-- Unauthenticated State: Show the two buttons -->
+            <div id="unauthPrompt" class="space-y-2">
+              <label class="block text-xs font-mono font-medium uppercase tracking-wider text-stone-500 dark:text-stone-400">Verify Identity to Submit</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button type="button" onclick="verifySubmitOAuth('Google')" class="flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800 transition text-sm font-medium text-stone-800 dark:text-stone-200 shadow-xs">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Google</span>
+                </button>
+                <button type="button" onclick="verifySubmitOAuth('GitHub')" class="flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800 transition text-sm font-medium text-stone-800 dark:text-stone-200 shadow-xs">
+                  <svg class="w-4 h-4 fill-current text-stone-900 dark:text-white" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                  </svg>
+                  <span>GitHub</span>
+                </button>
+              </div>
+              <p class="text-xs text-amber-700 dark:text-amber-400 flex items-center gap-1.5 pt-0.5">
+                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                Sign in with Google or GitHub to enable submitting ideas.
+              </p>
+            </div>
+
+            <!-- Authenticated State: Verified badge (NO buttons displayed!) -->
+            <div id="authBadge" class="hidden items-center justify-between p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-xs">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span class="text-emerald-900 dark:text-emerald-200 font-medium">Verified as <strong id="authBadgeEmail">alex@gmail.com</strong> (<span id="authBadgeProvider">Google</span>)</span>
+              </div>
+              <button type="button" onclick="logoutAuth()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 underline text-xs ml-2">Sign out</button>
+            </div>
+          </div>
+
+          <p class="text-xs text-stone-500 dark:text-stone-400">1-click Supabase Social Auth guarantees real identities with zero spam. Your email is kept strictly private.</p>
+
+          <div class="pt-2 flex justify-end space-x-3 items-center">
+            <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-200/60 dark:hover:bg-stone-800 transition">Cancel</button>
+            <!-- Inactive/Disabled when unauthenticated, Active when authenticated -->
+            <button id="submitIdeaBtn" type="submit" disabled class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition shadow-sm opacity-50 cursor-not-allowed bg-stone-300 text-stone-500 dark:bg-stone-800 dark:text-stone-500">
+              Submit Idea
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Success State -->
+      <div id="modalSuccessState" class="hidden text-center py-6">
+        <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h4 class="serif-title text-2xl font-normal text-stone-900 dark:text-white">Idea Published!</h4>
+        <p class="text-sm text-stone-600 dark:text-stone-400 mt-2 max-w-sm mx-auto">Your idea is now live on the board under review. You'll receive progress updates directly to your verified email.</p>
+        <button onclick="closeModal()" class="mt-6 px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-wider bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 transition">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vote Auth Prompt Modal (1-click verification before vote) -->
+  <div id="voteAuthModal" class="fixed inset-0 z-50 hidden bg-stone-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#fbf9f4] dark:bg-[#1a1a1a] rounded-2xl max-w-sm w-full p-6 border border-stone-200 dark:border-stone-800 shadow-2xl relative text-center">
+      <button onclick="closeVoteAuthModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-[#1b6b45] dark:text-[#34d399] flex items-center justify-center mx-auto mb-3">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+        </svg>
+      </div>
+      <h3 class="serif-title text-xl font-normal text-stone-950 dark:text-white">Verify to Upvote</h3>
+      <p class="text-xs text-stone-600 dark:text-stone-400 mt-1 mb-5">1-click social sign-in ensures 1 vote per verified person with zero spam. No passwords.</p>
+      
+      <div class="space-y-2.5">
+        <button onclick="confirmVoteAuth('Google')" class="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800 transition text-sm font-medium text-stone-800 dark:text-stone-200 shadow-xs">
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+        <button onclick="confirmVoteAuth('GitHub')" class="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800 transition text-sm font-medium text-stone-800 dark:text-stone-200 shadow-xs">
+          <svg class="w-4 h-4 fill-current text-stone-900 dark:text-white" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          <span>Continue with GitHub</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global Authentication State
+    let isUserAuthenticated = false;
+    let authUser = {
+      provider: 'Google',
+      email: 'alex.creator@gmail.com'
+    };
+    let pendingVoteBtn = null;
+    let pendingVoteCount = null;
+
+    // Theme Toggle Logic
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+
+    function updateIcons() {
+      if (html.classList.contains('dark')) {
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      } else {
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      }
+    }
+
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      updateIcons();
+    });
+
+    // Reactive Auth State UI Synchronizer
+    function updateAuthStateUI() {
+      const userHeaderBadge = document.getElementById('userHeaderBadge');
+      const userHeaderEmail = document.getElementById('userHeaderEmail');
+      const unauthPrompt = document.getElementById('unauthPrompt');
+      const authBadge = document.getElementById('authBadge');
+      const authBadgeEmail = document.getElementById('authBadgeEmail');
+      const authBadgeProvider = document.getElementById('authBadgeProvider');
+      const submitIdeaBtn = document.getElementById('submitIdeaBtn');
+
+      if (isUserAuthenticated) {
+        // 1. Show header status
+        if (userHeaderBadge) {
+          userHeaderBadge.classList.remove('hidden');
+          userHeaderBadge.classList.add('flex');
+          if (userHeaderEmail) userHeaderEmail.textContent = authUser.email;
+        }
+
+        // 2. In Submit Modal: HIDE the 2 social buttons entirely, SHOW verified badge
+        if (unauthPrompt) unauthPrompt.classList.add('hidden');
+        if (authBadge) {
+          authBadge.classList.remove('hidden');
+          authBadge.classList.add('flex');
+          if (authBadgeEmail) authBadgeEmail.textContent = authUser.email;
+          if (authBadgeProvider) authBadgeProvider.textContent = authUser.provider;
+        }
+
+        // 3. Make Submit Idea button ACTIVE
+        if (submitIdeaBtn) {
+          submitIdeaBtn.disabled = false;
+          submitIdeaBtn.className = 'px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-stone-950 hover:bg-stone-800 text-white dark:bg-white dark:text-stone-950 dark:hover:bg-stone-100 transition shadow-sm cursor-pointer';
+        }
+      } else {
+        // 1. Hide header status
+        if (userHeaderBadge) {
+          userHeaderBadge.classList.add('hidden');
+          userHeaderBadge.classList.remove('flex');
+        }
+
+        // 2. In Submit Modal: SHOW the 2 social buttons, HIDE verified badge
+        if (unauthPrompt) unauthPrompt.classList.remove('hidden');
+        if (authBadge) {
+          authBadge.classList.add('hidden');
+          authBadge.classList.remove('flex');
+        }
+
+        // 3. Make Submit Idea button INACTIVE / DISABLED
+        if (submitIdeaBtn) {
+          submitIdeaBtn.disabled = true;
+          submitIdeaBtn.className = 'px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition shadow-sm opacity-50 cursor-not-allowed bg-stone-300 text-stone-500 dark:bg-stone-800 dark:text-stone-500';
+        }
+      }
+    }
+
+    function setAuthenticated(provider) {
+      isUserAuthenticated = true;
+      authUser.provider = provider || 'Google';
+      authUser.email = provider === 'GitHub' ? 'alex-dev@github.com' : 'alex.creator@gmail.com';
+      updateAuthStateUI();
+    }
+
+    function clearAllVotes() {
+      // Remove personal active highlights/frames when user signs out,
+      // but PRESERVE the cast vote counts since verified votes are permanently recorded in the database.
+      document.querySelectorAll('.vote-btn.voted').forEach(btn => {
+        btn.classList.remove('voted', 'bg-emerald-50', 'border-emerald-500', 'text-emerald-700', 'dark:bg-emerald-950/40', 'dark:border-emerald-600');
+      });
+    }
+
+    function logoutAuth() {
+      isUserAuthenticated = false;
+      authUser = { provider: '', email: '' };
+      clearAllVotes();
+      updateAuthStateUI();
+    }
+
+    // Upvote Toggle Logic with 1-Click Social Verification
+    function toggleVote(btn) {
+      if (!isUserAuthenticated) {
+        pendingVoteBtn = btn;
+        openVoteAuthModal();
+        return;
+      }
+      applyVote(btn);
+    }
+
+    function applyVote(btn) {
+      const countSpan = btn.querySelector('.vote-count');
+      const isVoted = btn.classList.contains('voted');
+      const currentCount = parseInt(countSpan.textContent, 10);
+      
+      if (isVoted) {
+        btn.classList.remove('voted', 'bg-emerald-50', 'border-emerald-500', 'text-emerald-700', 'dark:bg-emerald-950/40', 'dark:border-emerald-600');
+        countSpan.textContent = currentCount - 1;
+      } else {
+        btn.classList.add('voted', 'bg-emerald-50', 'border-emerald-500', 'text-emerald-700', 'dark:bg-emerald-950/40', 'dark:border-emerald-600');
+        countSpan.textContent = currentCount + 1;
+      }
+    }
+
+    function openVoteAuthModal() {
+      document.getElementById('voteAuthModal').classList.remove('hidden');
+    }
+
+    function closeVoteAuthModal() {
+      document.getElementById('voteAuthModal').classList.add('hidden');
+    }
+
+    function confirmVoteAuth(provider) {
+      setAuthenticated(provider);
+      closeVoteAuthModal();
+      if (pendingVoteBtn) {
+        applyVote(pendingVoteBtn);
+        pendingVoteBtn = null;
+      }
+    }
+
+    // Modal Submission Verification
+    function verifySubmitOAuth(provider) {
+      setAuthenticated(provider);
+    }
+
+    // Modal Logic
+    function openModal() {
+      updateAuthStateUI();
+      document.getElementById('submitModal').classList.remove('hidden');
+      document.getElementById('modalFormContainer').classList.remove('hidden');
+      document.getElementById('modalSuccessState').classList.add('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('submitModal').classList.add('hidden');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      if (!isUserAuthenticated) {
+        alert('Please verify with Google or GitHub before submitting.');
+        return;
+      }
+      document.getElementById('modalFormContainer').classList.add('hidden');
+      document.getElementById('modalSuccessState').classList.remove('hidden');
+    }
+
+    // Infinite Scroll Pagination (100 items per batch simulation)
+    let pageLoaded = 1;
+    let isLoadingBatch = false;
+
+    const additionalBatch = [
+      {
+        title: "Webhook triggers for status transitions",
+        desc: "Trigger custom webhook payloads whenever an idea moves between lifecycle states.",
+        votes: 18,
+        status: "PLANNED",
+        statusColor: "text-emerald-700 bg-emerald-50 dark:bg-emerald-950/50 dark:text-emerald-400 border-emerald-200/60 dark:border-emerald-800/60"
+      },
+      {
+        title: "SSO & SAML authentication for team",
+        desc: "Enable internal team members to log in via company Okta and Google Workspace SAML.",
+        votes: 14,
+        status: "IN PROGRESS",
+        statusColor: "text-blue-700 bg-blue-50 dark:bg-blue-950/50 dark:text-blue-400 border-blue-200/60 dark:border-blue-800/60"
+      },
+      {
+        title: "Automated duplicate detection on import",
+        desc: "Surface duplicate suggestions when importing tickets from support channels.",
+        votes: 11,
+        status: "UNDER REVIEW",
+        statusColor: "text-amber-800 bg-amber-50 dark:bg-amber-950/50 dark:text-amber-400 border-amber-200/60 dark:border-amber-800/60"
+      }
+    ];
+
+    function handleInfiniteScroll() {
+      if (isLoadingBatch || pageLoaded > 1) return;
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const threshold = document.documentElement.scrollHeight - 200;
+
+      if (scrollPosition >= threshold) {
+        loadNextBatch();
+      }
+    }
+
+    function loadNextBatch() {
+      isLoadingBatch = true;
+      const spinner = document.getElementById('loadingSpinner');
+      const notice = document.getElementById('endOfFeedNotice');
+      if (spinner) spinner.classList.remove('hidden');
+      if (notice) notice.classList.add('hidden');
+
+      setTimeout(() => {
+        const ideasList = document.getElementById('ideasList');
+        additionalBatch.forEach(idea => {
+          const div = document.createElement('div');
+          div.className = "group bg-white/80 dark:bg-[#1a1a1a] rounded-xl p-4 sm:p-5 border border-stone-200/80 dark:border-stone-800 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:border-stone-300 dark:hover:border-stone-700 hover:shadow-md transition flex items-center justify-between gap-4 cursor-pointer";
+          div.innerHTML = `
+            <div class="flex items-center gap-4 sm:gap-5 flex-1 min-w-0">
+              <button onclick="event.stopPropagation(); toggleVote(this)" class="vote-btn flex flex-col items-center justify-center w-12 h-14 rounded-lg border border-stone-200 dark:border-stone-800 bg-stone-50/80 dark:bg-stone-900/60 hover:bg-emerald-50 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:border-emerald-700 transition flex-shrink-0">
+                <svg class="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+                </svg>
+                <span class="vote-count font-bold text-sm text-stone-800 dark:text-stone-200 mt-0.5">${idea.votes}</span>
+              </button>
+              <div class="min-w-0 flex-1">
+                <h2 class="text-base font-semibold text-stone-900 dark:text-stone-100 truncate">${idea.title}</h2>
+                <p class="text-sm text-stone-500 dark:text-stone-400 mt-0.5 truncate">${idea.desc}</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-3 flex-shrink-0">
+              <span class="text-xs font-bold tracking-wider uppercase px-3 py-1 rounded-full border ${idea.statusColor}">
+                ${idea.status}
+              </span>
+              <svg class="w-4 h-4 text-stone-300 dark:text-stone-600 group-hover:text-stone-400 dark:group-hover:text-stone-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          `;
+          ideasList.appendChild(div);
+        });
+
+        pageLoaded++;
+        isLoadingBatch = false;
+        if (spinner) spinner.classList.add('hidden');
+        if (notice) {
+          notice.textContent = "— ALL 100 IDEAS LOADED • END OF FEED —";
+          notice.classList.remove('hidden');
+        }
+        const counter = document.getElementById('ideasCounterBadge');
+        if (counter) counter.textContent = "— 8 IDEAS (PAGINATED: 100 / PAGE) —";
+      }, 500);
+    }
+
+    window.addEventListener('scroll', handleInfiniteScroll);
+
+    // Initialize UI on load
+    updateAuthStateUI();
+  </script>
+</body>
+</html>

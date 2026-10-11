@@ -1,0 +1,82 @@
+From: Sarah Johnson <sarah@company.com>
+To: Dev Team <dev@company.com>
+Subject: Idea for customer feedback thing?
+
+Hey team,
+
+I've been thinking... we're getting feedback all over the place – emails, Twitter DMs, that chat widget on the site, sometimes even LinkedIn messages. It's kind of a mess and I'm not sure we're capturing everything or responding to the right stuff.
+
+What if we had like... a place where customers could just post their ideas? I'm thinking something public maybe? So other customers can see what people are asking for? Not sure if they should be able to comment or just vote on things they want too.
+
+Also I think it would be good if we could keep track of what we're actually working on vs what we're just thinking about. Like some kind of status thing? But I don't want customers to have to create accounts or anything – that seems like too much friction.
+
+Oh and obviously we'd need to see who submitted what, but maybe not publicly? For follow-up emails and stuff.
+
+Anyway, just an idea. Let me know what you think or if this even makes sense.
+
+Sarah
+
+=======================================
+
+From: Sarah Johnson <sarah@company.com>
+To: Dev Team <dev@company.com>
+Subject: Re: Idea for customer feedback thing?
+
+Following up on my last email...
+
+So I was talking to Mark and he mentioned that we probably need some way to verify people are real before we just let anyone post feedback. Maybe send them an email to confirm? Otherwise we'll get spammed to death.
+
+Also thinking the team needs a way to add internal notes on feedback items. Like "talked to customer, they actually want X not Y" or "duplicate of #123" or whatever. Stuff customers shouldn't see.
+
+I sketched out really roughly how I imagine this could look (see attached – sorry it's messy, did it on a napkin at lunch). But honestly I'm not married to any particular design, just need it to work and be easy for customers to use.
+
+One more thing – should we let people upvote stuff? Or is that too Reddit-y? I dunno, might be useful to see what's actually popular vs just loud.
+
+Let me know your thoughts when you get a chance!
+
+Sarah
+
+=======================================
+
+From: Mike Chen <mike@company.com>
+To: Sarah Johnson <sarah@company.com>
+Cc: Dev Team <dev@company.com>
+Subject: Re: Idea for customer feedback thing?
+
+Sarah,
+
+Quick questions about this feedback platform idea:
+
+- Do we want customers to be able to see what status their feedback is in? Like "we're working on it" vs "not planned"?
+- Should there be different categories? Or just one big list?
+- Who on the team should be able to update statuses? Everyone or just certain people?
+- When we change a status, do we email the customer who submitted it?
+- Are we showing upvote counts publicly or just tracking them internally?
+
+Also not sure I understand from your description – is this replacing our support system or just for feature requests and ideas? Or both?
+
+I think I like the concept but want to make sure we're all on the same page about what this actually is before we start building.
+
+Mike
+
+=======================================
+
+From: David Park <david@company.com>
+To: Sarah Johnson <sarah@company.com>
+Cc: Dev Team <dev@company.com>, Mike Chen <mike@company.com>
+Subject: Re: Idea for customer feedback thing?
+
+Team,
+
+Love this idea. Transparency with customers is huge for us.
+
+Just make sure:
+1. It's dead simple for customers to use – no barriers
+2. We're not creating more work for ourselves
+3. It actually helps us prioritize what to build
+
+Don't overthink it. Start with something basic and we can always add more features later if we need them. I'd rather have something working in a few weeks than perfect in six months.
+
+The sketch Sarah sent looks fine to me. Let's just build that.
+
+David
