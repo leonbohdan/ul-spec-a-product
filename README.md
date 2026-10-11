@@ -52,10 +52,10 @@ The product features are sequenced into a progressive, dependency-based implemen
 ## 🛠 Tech Stack
 
 - **Frontend:** Nuxt 4 (Vue 3)
+- **Backend & Server Engine:** Nuxt 4 Nitro Server (API routes, server middleware)
 - **State Management:** Pinia (`@pinia/nuxt`) for reactive vote and session tracking
-- **Styling & Theming:** Tailwind CSS v4 (native Light & Dark theme support)
-- **Backend:** NestJS
-- **Database & Auth:** PostgreSQL hosted on Supabase, accessed via Prisma ORM & Supabase Auth
+- **Styling & Theming:** Tailwind CSS v4 (`@nuxtjs/tailwindcss`) with `@nuxtjs/color-mode` (native Light & Dark theme support)
+- **Database & Auth:** PostgreSQL hosted on Supabase, accessed via Prisma ORM & Supabase Auth (`@nuxtjs/supabase`)
 - **Email & Queue:** Nodemailer with an asynchronous background queue (`pg-boss` on PostgreSQL) featuring exponential backoff retries
 
 ---

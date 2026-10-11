@@ -154,9 +154,9 @@ Based directly on the initial napkin sketch wireframe:
 ## 6. Technical Stack
 
 - **Frontend Framework:** Nuxt 4 (Vue 3)
+- **Backend & Server Engine:** Nuxt 4 Server Engine (Nitro) — full-stack architecture handling API routes, Prisma ORM, and email delivery without a separate backend framework
 - **State & Storage Management:** Pinia (`@pinia/nuxt`) paired with Nuxt 4 and Vue 3 for reactive state management, local storage persistence, and client session/vote tracking
-- **Backend:** NestJS
 - **Database & ORM:** PostgreSQL hosted on Supabase, accessed via Prisma ORM
-- **Authentication:** Supabase Auth (1-click Google/GitHub Social Auth for customers; secure team member login)
-- **Styling & Theming:** Tailwind CSS v4 with full support for light and dark themes
+- **Authentication:** Supabase Auth (`@nuxtjs/supabase`) with 1-click Google/GitHub Social Auth for customers and secure team member login
+- **Styling & Theming:** Tailwind CSS v4 (`@nuxtjs/tailwindcss`) with `@nuxtjs/color-mode` for seamless light and dark theme switching
 - **Email Delivery & Resilience:** Nodemailer with an asynchronous queue (`pg-boss` on PostgreSQL) featuring automatic retries and exponential backoff
