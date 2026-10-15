@@ -160,3 +160,4 @@ Based directly on the initial napkin sketch wireframe:
 - **Authentication:** Supabase Auth (`@nuxtjs/supabase`) with 1-click Google/GitHub Social Auth for customers and secure team member login
 - **Styling & Theming:** Tailwind CSS v4 (`@nuxtjs/tailwindcss`) with `@nuxtjs/color-mode` for seamless light and dark theme switching
 - **Email Delivery & Resilience:** Nodemailer with an asynchronous queue (`pg-boss` on PostgreSQL) featuring automatic retries and exponential backoff
+- **Testing Framework:** Vitest with `@nuxt/test-utils`, `@vue/test-utils`, and `happy-dom` for fast unit, composable, store, and component testing within the native Nuxt 4 / Vite runtime environment

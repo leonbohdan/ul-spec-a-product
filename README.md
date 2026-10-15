@@ -57,6 +57,7 @@ The product features are sequenced into a progressive, dependency-based implemen
 - **Styling & Theming:** Tailwind CSS v4 (`@nuxtjs/tailwindcss`) with `@nuxtjs/color-mode` (native Light & Dark theme support)
 - **Database & Auth:** PostgreSQL hosted on Supabase, accessed via Prisma ORM & Supabase Auth (`@nuxtjs/supabase`)
 - **Email & Queue:** Nodemailer with an asynchronous background queue (`pg-boss` on PostgreSQL) featuring exponential backoff retries
+- **Testing:** Vitest with `@nuxt/test-utils` and `happy-dom` for unit, store, composable, and component testing
 
 ---
 
